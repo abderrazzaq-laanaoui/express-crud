@@ -3,77 +3,46 @@ const path = require('path');
 const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const logger = require('./logger');
-const authenticator = require('./authenticator');
-const courses = require('./courses');
+const pug = require('pug');
+const logger = require('./middelwares/logger');
+const authenticator = require('./middelwares/authenticator');
+const courses = require('./services/courses.service');
 const Joi = require('joi');
 const config = require('config');
-//LOG FILE
-// create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+
+//routes
+const coursesRouter = require('./routes/courses.router');
+const indexRouter = require('./routes/index.router');
 const app = express();
+
+//LOG FILE
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' }) // create a write stream (in append mode)
 app.use(morgan('combined', { skip: (req, res) => res.statusCode < 400, stream: accessLogStream }))
 
 //GET DATE FROM CONFIG FILES:
 console.log(`APPLICATION NAME: ${config.get('name')}`);
 console.log(`MAIL HOST: ${config.get('mail.host')}`);
-//the password was mapped from env varibale (express_mail_password=1234)
-console.log(`MAIL PASSWORD: ${config.get('mail.password')}`);
+console.log(`MAIL PASSWORD: ${config.get('mail.password')}`); //the password was mapped from env varibale (express_mail_password=1234)
 
+//GET ENVIRENMENT VARIABLES
 console.log(`NODE_ENV: ${app.get('env')}`);
+
+//MIDELWARES
 app.use(express.json());
 app.use(logger);
 app.use(authenticator);
 app.use(helmet());
 
-app.get('/', (req, res) => {
-    res.send('hello world!');
-})
+//routers
+app.use('/api/courses', coursesRouter);
+app.use('/', indexRouter);
 
-app.get('/api/courses', (req, res) => {
-    res.send(courses.getCourses())
-})
+//----template engine-------//
+app.set('view engine', 'pug');
+app.set('views', './views'); // './views' is the default dir so need to mention it if we are not chnaging it
 
-app.get('/api/courses/:id', (req, res) => {
-    const course = courses.getCourse(parseInt(req.params.id));
-
-    if (!course) return res.status(404).send("No course with given id was found!")
-    res.send(course);
-})
-
-app.post('/api/courses', (req, res) => {
-    let { error } = validateRequest(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    let course = courses.addCourse(req.body.name, parseInt(req.body.viewers))
-    res.send(course);
-})
-
-app.put('/api/courses/:id', (req, res) => {
-    let { error } = validateRequest(req.body);
-    if (error)
-        return res.status(400).send(error.details[0].message);
-
-    if (!courses.getCourse(parseInt(req.params.id)))
-        return res.status(404).send("No course with given id was found!");
-    let course = courses.editCourse(parseInt(req.params.id), req.body.name, req.body.viewers);
-    res.send(course);
-})
-
-app.delete('/api/courses/:id', (req, res) => {
-    if (!courses.getCourse(parseInt(req.params.id))) return res.status(404).send("No course with given id was found!");
-    res.send(courses.deleteCourse(parseInt(req.params.id)));
-})
 
 const port = process.env.PORT || 80
 app.listen(port, () => {
     console.log(`listening on port ${port}...`);
 })
-
-function validateRequest(body) {
-    let courseSchema = Joi.object({
-        name: Joi.string().min(3).required(),
-        viewers: Joi.number().min(0).required()
-    });
-    return courseSchema.validate(body);
-}

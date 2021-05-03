@@ -1,3 +1,7 @@
-[0mGET /api/courses/6 [33m404[0m 3.956 ms - 34[0m
 ::1 - - [03/May/2021:05:19:53 +0000] "GET /api/courses/6 HTTP/1.1" 404 34 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
 ::1 - - [03/May/2021:05:21:56 +0000] "POST /api/courses/ HTTP/1.1" 400 21 "-" "PostmanRuntime/7.28.0"
+::1 - - [03/May/2021:10:49:18 +0000] "GET / HTTP/1.1" 500 1385 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
+::1 - - [03/May/2021:10:49:36 +0000] "GET / HTTP/1.1" 500 1396 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
+::1 - - [03/May/2021:10:50:33 +0000] "GET / HTTP/1.1" 500 1396 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
+::1 - - [03/May/2021:11:29:17 +0000] "GET /api/courses HTTP/1.1" 404 150 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
+::1 - - [03/May/2021:11:29:25 +0000] "GET /api/courses HTTP/1.1" 404 150 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36"
