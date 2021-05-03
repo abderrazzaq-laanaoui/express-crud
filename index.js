@@ -7,11 +7,18 @@ const logger = require('./logger');
 const authenticator = require('./authenticator');
 const courses = require('./courses');
 const Joi = require('joi');
+const config = require('config');
 //LOG FILE
 // create a write stream (in append mode)
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 const app = express();
 app.use(morgan('combined', { skip: (req, res) => res.statusCode < 400, stream: accessLogStream }))
+
+//GET DATE FROM CONFIG FILES:
+console.log(`APPLICATION NAME: ${config.get('name')}`);
+console.log(`MAIL HOST: ${config.get('mail.host')}`);
+//the password was mapped from env varibale (express_mail_password=1234)
+console.log(`MAIL PASSWORD: ${config.get('mail.password')}`);
 
 console.log(`NODE_ENV: ${app.get('env')}`);
 app.use(express.json());
