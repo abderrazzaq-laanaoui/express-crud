@@ -9,7 +9,13 @@ let courses = [
 let courseID = 6;
 
 function getCourses() {
-    return courses;
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(courses);
+            // reject(new Error("Something goes wrong!"))
+        }, 3000)
+    })
+
 }
 
 function getCourse(id) {
@@ -18,9 +24,10 @@ function getCourse(id) {
 }
 
 function addCourse(name, viewers) {
-    courses.push({ id: courseID, name: name, viewers: viewers });
+    let course = { id: courseID, name: name, viewers: viewers }
+    courses.push(course);
     courseID += 1;
-    return courses[courseID - 2];
+    return course;
 }
 
 function editCourse(id, name, viewers) {
@@ -31,7 +38,6 @@ function editCourse(id, name, viewers) {
 }
 
 function deleteCourse(id) {
-
     let course = courses.find(c => c.id === id);
     let index = courses.indexOf(course);
     courses.splice(index, 1);

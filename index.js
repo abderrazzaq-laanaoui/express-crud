@@ -19,13 +19,14 @@ const app = express();
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' }) // create a write stream (in append mode)
 app.use(morgan('combined', { skip: (req, res) => res.statusCode < 400, stream: accessLogStream }))
 
+//GET ENVIRENMENT VARIABLES
+console.log(`NODE_ENV: ${app.get('env')}`);
+
 //GET DATE FROM CONFIG FILES:
 console.log(`APPLICATION NAME: ${config.get('name')}`);
 console.log(`MAIL HOST: ${config.get('mail.host')}`);
 console.log(`MAIL PASSWORD: ${config.get('mail.password')}`); //the password was mapped from env varibale (express_mail_password=1234)
 
-//GET ENVIRENMENT VARIABLES
-console.log(`NODE_ENV: ${app.get('env')}`);
 
 //MIDELWARES
 app.use(express.json());

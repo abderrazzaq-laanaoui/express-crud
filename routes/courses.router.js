@@ -1,9 +1,16 @@
+const Joi = require('joi');
 const express = require('express');
 const courses = require('../services/courses.service')
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    res.send(courses.getCourses())
+router.get('/', async(req, res) => {
+    try {
+        let coursesList = await courses.getCourses();
+        res.send(coursesList);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).send(e.message);
+    }
 })
 
 router.get('/:id', (req, res) => {
